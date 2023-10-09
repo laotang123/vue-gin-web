@@ -1,52 +1,79 @@
 <template>
   <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+           background-color="#545c64"
+           text-color="#fff"
+           active-text-color="#ffd04b"
            :collapse="isCollapse">
-    <el-submenu index="1">
+    <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
+
+    <el-menu-item v-for="item in noChildren" :index="item.path" :key="item.path">
+      <i :class="'el-icon-' + item.icon"></i>
+      <span slot="title">{{ item.label }}</span>
+    </el-menu-item>
+    <el-submenu v-for="item in hasChildren" :index="item.path" :key="item.path">
       <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航一</span>
+        <i :class="`el-icon-${item.icon}`"></i>
+        <span slot="title">{{ item.label }}</span>
       </template>
-      <el-menu-item-group>
-        <span slot="title">分组一</span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
+      <el-menu-item-group v-for="subItem in item.children" :key="subItem.path">
+        <!--        <span slot="title">分组一</span>-->
+        <el-menu-item :index="subItem.path">{{ subItem.label }}</el-menu-item>
       </el-menu-item-group>
-      <el-menu-item-group title="分组2">
-        <el-menu-item index="1-3">选项3</el-menu-item>
-      </el-menu-item-group>
-      <el-submenu index="1-4">
-        <span slot="title">选项4</span>
-        <el-menu-item index="1-4-1">选项1</el-menu-item>
-      </el-submenu>
     </el-submenu>
-    <el-menu-item index="2">
-      <i class="el-icon-menu"></i>
-      <span slot="title">导航二</span>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <i class="el-icon-document"></i>
-      <span slot="title">导航三</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <i class="el-icon-setting"></i>
-      <span slot="title">导航四</span>
-    </el-menu-item>
   </el-menu>
 
 
 </template>
-<style>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
-</style>
 
 <script>
 export default {
   data() {
     return {
-      isCollapse: true
+      isCollapse: false,
+      menuData: [
+        {
+          path: "/home",
+          name: "home",
+          label: "首页",
+          icon: "s-home",
+          url: "Home/Home",
+        },
+        {
+          path: "/mall",
+          name: "mall",
+          label: "商品管理",
+          icon: "video-play",
+          url: "MallManage/MallManage",
+        },
+        {
+          path: "/user",
+          name: "user",
+          label: "用户管理",
+          icon: "user",
+          url: "UserManage/UserManage",
+        },
+        {
+          path: "/other",
+          label: "其他",
+          icon: "location",
+          children: [
+            {
+              path: "/page1",
+              name: "page1",
+              label: "页面1",
+              icon: "setting",
+              url: "Other/PageOne",
+            },
+            {
+              path: "/page2",
+              name: "page2",
+              label: "页面2",
+              icon: "setting",
+              url: "Other/PageTwo",
+            },
+          ],
+        }
+      ]
     };
   },
   methods: {
@@ -56,6 +83,30 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     }
+  },
+  computed: {
+    noChildren() {
+      return this.menuData.filter((item) => !item.children)
+    },
+    hasChildren() {
+      return this.menuData.filter((item) => item.children)
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
+.el-menu {
+  height: 100vh;
+  border: none;
+h3 {
+  color: #fff;
+  text-align: center;
+  line-height: 48px;
+}
+}
+</style>
