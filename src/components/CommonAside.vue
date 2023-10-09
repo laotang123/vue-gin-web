@@ -6,7 +6,7 @@
            :collapse="isCollapse">
     <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
 
-    <el-menu-item v-for="item in noChildren" :index="item.path" :key="item.path">
+    <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :index="item.path" :key="item.path">
       <i :class="'el-icon-' + item.icon"></i>
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
@@ -17,7 +17,7 @@
       </template>
       <el-menu-item-group v-for="subItem in item.children" :key="subItem.path">
         <!--        <span slot="title">分组一</span>-->
-        <el-menu-item :index="subItem.path">{{ subItem.label }}</el-menu-item>
+        <el-menu-item @click="clickMenu(subItem)" :index="subItem.path">{{ subItem.label }}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
@@ -58,14 +58,14 @@ export default {
           icon: "location",
           children: [
             {
-              path: "/page1",
+              path: "/other/page1",
               name: "page1",
               label: "页面1",
               icon: "setting",
               url: "Other/PageOne",
             },
             {
-              path: "/page2",
+              path: "/other/page2",
               name: "page2",
               label: "页面2",
               icon: "setting",
@@ -82,6 +82,9 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    clickMenu(item) {
+      this.$router.push(item.path)
     }
   },
   computed: {
@@ -100,13 +103,16 @@ export default {
   width: 200px;
   min-height: 400px;
 }
+
 .el-menu {
   height: 100vh;
   border: none;
+
 h3 {
   color: #fff;
   text-align: center;
   line-height: 48px;
 }
+
 }
 </style>
