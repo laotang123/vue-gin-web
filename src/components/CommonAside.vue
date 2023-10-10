@@ -29,7 +29,6 @@
 export default {
   data() {
     return {
-      isCollapse: false,
       menuData: [
         {
           path: "/home",
@@ -84,7 +83,9 @@ export default {
       console.log(key, keyPath);
     },
     clickMenu(item) {
-      this.$router.push(item.path)
+      // if (this.$route.path !== item.path){
+        this.$router.push(item.path)
+      // }
     }
   },
   computed: {
@@ -93,6 +94,9 @@ export default {
     },
     hasChildren() {
       return this.menuData.filter((item) => item.children)
+    },
+    isCollapse(){
+      return this.$store.state.tab.isCollapse
     }
   }
 }
