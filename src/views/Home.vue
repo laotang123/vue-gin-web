@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import UserApi from '@/api/user';
+
 export default {
   name: 'Home',
   props: {
@@ -32,6 +34,18 @@ export default {
     ping() {
       console.log("ping")
       this.message = "pong success"
+      UserApi.ping().then(res => {
+        console.log("ping res: ", res)
+        try {
+          if (res.code == 200) {
+            this.message = res.data
+          } else {
+            this.$message.warning(res.message)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      })
     }
   }
 }
